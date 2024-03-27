@@ -7,8 +7,8 @@
   "Category": "Simple Weather",
   "CategoryIcon": "actions/weather/assets/actionimage",
   "Icon": "actions/weather/assets/action",
-  "SDKVersion": 2,
   "CodePath": "app.html",
+  "SDKVersion": 2,
   "Software": {
     "MinimumVersion": "5.0"
   },
