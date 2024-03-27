@@ -1,4 +1,5 @@
 const weatherAction = new Action('com.dariom.simple-weather.weather-action');
+let intervalID = null;
 
 /**
  * The first event fired when Stream Deck starts
@@ -10,25 +11,41 @@ weatherAction.onKeyUp(async ({action, context, device, event, payload}) => {
     const settings = trimSettings(payload.settings);
     validateSettings(settings, context);
 
-    const {apiKey, latitude, longitude, unit} = settings;
-
-    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?appid=${apiKey}&lat=${latitude}&lon=${longitude}&units=${unit}`;
-    const weatherData = await getWeatherData(weatherUrl, context);
-
-    const iconUrl = `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`;
-    let icon = await getWeatherIcon(iconUrl, context);
-
-    const temperature = weatherData.main.temp.toFixed(0) + (unit === "metric" ? "°C" : "°F");
-
-    $SD.setTitle(context, temperature);
-    $SD.setImage(context, icon);
+    const loadWeatherFn = loadWeather(settings, context);
+    await loadWeatherFn();
+    setupRefresh(settings.refresh, loadWeatherFn);
 });
 
+function loadWeather(settings, context) {
+    return async () => {
+        const {apiKey, latitude, longitude, unit} = settings;
+
+        const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?appid=${apiKey}&lat=${latitude}&lon=${longitude}&units=${unit}`;
+        const weatherData = await getWeatherData(weatherUrl, context);
+
+        const iconUrl = `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`;
+        let icon = await getWeatherIcon(iconUrl, context);
+
+        const temperature = weatherData.main.temp.toFixed(0) + (unit === "metric" ? "°C" : "°F");
+
+        $SD.setTitle(context, temperature);
+        $SD.setImage(context, icon);
+    }
+}
+
+function setupRefresh(refresh, fn) {
+    const refreshInterval = parseInt(refresh);
+    if (refreshInterval) {
+        clearInterval(intervalID);
+        intervalID = setInterval(() => fn(), refreshInterval);
+    }
+}
+
 function trimSettings(settings) {
-    const trimmedSettings = {};
-    Object.keys(settings)
-        .forEach(key => trimmedSettings[key] = settings[key].trim());
-    return trimmedSettings;
+    return Object.fromEntries(
+        Object.keys(settings)
+            .map(key => [key, settings[key].trim()])
+    );
 }
 
 function validateSettings(settings, context) {

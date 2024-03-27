@@ -1,5 +1,5 @@
 # Simple Weather plugin for Stream Deck
 
 ## TODO
-- add update frequency
+- write readme
 - update icons
