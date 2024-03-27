@@ -3,7 +3,7 @@
   "Description": "Simple widget to display weather information",
   "Version": "1.0.0",
   "Author": "Dario Mauri",
-  "URL": "TODO",
+  "URL": "https://github.com/dario-mr/simple-weather-sdplugin",
   "Category": "Simple Weather",
   "CategoryIcon": "actions/weather/assets/actionimage",
   "Icon": "actions/weather/assets/action",
@@ -27,7 +27,7 @@
       "Name": "Weather",
       "Icon": "actions/weather/assets/actionimage",
       "UUID": "com.dariom.simple-weather.weather-action",
-      "PropertyInspectorPath": "actions/weather/property-inspector/inspector.html",
+      "PropertyInspectorPath": "actions/weather/settings/settings.html",
       "States": [
         {
           "Image": "actions/weather/assets/action"

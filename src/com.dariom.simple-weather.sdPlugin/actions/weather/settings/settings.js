@@ -1,5 +1,5 @@
 $PI.onConnected((json) => {
-    const form = document.querySelector('#property-inspector');
+    const form = document.getElementById('settings');
     const settings = json.actionInfo.payload.settings;
 
     Utils.setFormValue(settings, form);

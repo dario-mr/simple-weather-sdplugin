@@ -1,8 +1,8 @@
-# Simple Weather Stream Deck plugin
+# Simple Weather plugin for Stream Deck
 
 ## TODO
 - add input validation
-- add fetch frequency
+- add update frequency
 - update manifest
 - update icons
-- rename inspector to settings
+- check temperature approximation
