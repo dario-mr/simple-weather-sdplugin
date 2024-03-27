@@ -1,0 +1,38 @@
+{
+  "Name": "Simple Weather",
+  "Description": "Simple widget to display weather information",
+  "Version": "1.0.0",
+  "Author": "Dario Mauri",
+  "URL": "TODO",
+  "Category": "Simple Weather",
+  "CategoryIcon": "actions/weather/assets/actionimage",
+  "Icon": "actions/weather/assets/action",
+  "SDKVersion": 2,
+  "CodePath": "app.html",
+  "Software": {
+    "MinimumVersion": "5.0"
+  },
+  "OS": [
+    {
+      "Platform": "mac",
+      "MinimumVersion": "10.11"
+    },
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Actions": [
+    {
+      "Name": "Weather",
+      "Icon": "actions/weather/assets/actionimage",
+      "UUID": "com.dariom.simple-weather.weather-action",
+      "PropertyInspectorPath": "actions/weather/property-inspector/inspector.html",
+      "States": [
+        {
+          "Image": "actions/weather/assets/action"
+        }
+      ]
+    }
+  ]
+}
