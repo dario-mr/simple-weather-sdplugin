@@ -7,61 +7,68 @@ $SD.onConnected(({actionInfo, appInfo, connection, messageType, port, uuid}) => 
 });
 
 weatherAction.onKeyUp(async ({action, context, device, event, payload}) => {
-    const {apiKey, latitude, longitude, unit} = payload.settings;
+    const settings = trimSettings(payload.settings);
+    validateSettings(settings, context);
+
+    const {apiKey, latitude, longitude, unit} = settings;
 
     const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?appid=${apiKey}&lat=${latitude}&lon=${longitude}&units=${unit}`;
+    const weatherData = await getWeatherData(weatherUrl, context);
 
-    let weatherData;
-    try {
-        weatherData = await getWeatherData(weatherUrl);
-    } catch (e) {
-        $SD.showAlert(context);
-        return;
-    }
+    const iconUrl = `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`;
+    let icon = await getWeatherIcon(iconUrl, context);
 
     const temperature = weatherData.main.temp.toFixed(0) + (unit === "metric" ? "°C" : "°F");
-    const iconUrl = `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`;
 
-    let icon;
-    try {
-        icon = await getWeatherIcon(iconUrl);
-    } catch (e) {
-        $SD.showAlert(context);
-        return;
-    }
-
-    $SD.setTitle(context, temperature, Constants.hardwareAndSoftware);
+    $SD.setTitle(context, temperature);
     $SD.setImage(context, icon);
 });
 
-async function getWeatherData(url) {
+function trimSettings(settings) {
+    const trimmedSettings = {};
+    Object.keys(settings)
+        .forEach(key => trimmedSettings[key] = settings[key].trim());
+    return trimmedSettings;
+}
+
+function validateSettings(settings, context) {
+    for (let key in settings) {
+        if (!settings[key]) {
+            $SD.showAlert(context);
+            throw new Error(`Setting <${key}> has no value`);
+        }
+    }
+}
+
+async function getWeatherData(url, context) {
     return fetch(url)
         .then(response => {
             if (response.ok) {
                 return response.json();
             }
-            return Promise.reject({
-                status: response.status,
-                statusText: response.statusText
-            });
+            $SD.showAlert(context);
+            throw new Error(`Error fetching weather data from <${url}>: <${response.status}, ${response.statusText}>`);
         });
 }
 
-async function getWeatherIcon(url) {
+async function getWeatherIcon(url, context) {
     return fetch(url)
+        // download image as blob
         .then(response => {
             if (response.ok) {
                 return response.blob();
             }
-            return Promise.reject({
-                status: response.status,
-                statusText: response.statusText
-            });
+            $SD.showAlert(context);
+            throw new Error(`Error fetching weather icon from <${url}>: <${response.status}, ${response.statusText}>`);
         })
-        .then(blob => new Promise((resolve, reject) => {
+        // convert blob to base64 image
+        .then(blob => new Promise((resolve) => {
             const reader = new FileReader();
             reader.onloadend = () => resolve(reader.result);
-            reader.onerror = reject;
+            reader.onerror = () => {
+                $SD.showAlert(context);
+                throw new Error("Error loading weather icon");
+            };
             reader.readAsDataURL(blob);
         }));
 }
