@@ -27,7 +27,7 @@
       "Name": "Weather",
       "Icon": "assets/actionIcon",
       "UUID": "com.dariom.simple-weather.weather-action",
-      "PropertyInspectorPath": "actions/weather/settings/settings.html",
+      "PropertyInspectorPath": "actions/weather/settings.html",
       "States": [
         {
           "Image": "assets/stateIcon"
