@@ -4,9 +4,9 @@
   "Version": "1.0.0",
   "Author": "Dario Mauri",
   "URL": "https://github.com/dario-mr/simple-weather-sdplugin",
+  "Icon": "assets/icon",
   "Category": "Simple Weather",
-  "CategoryIcon": "actions/weather/assets/actionimage",
-  "Icon": "actions/weather/assets/action",
+  "CategoryIcon": "assets/categoryIcon",
   "CodePath": "app.html",
   "SDKVersion": 2,
   "Software": {
@@ -25,12 +25,12 @@
   "Actions": [
     {
       "Name": "Weather",
-      "Icon": "actions/weather/assets/actionimage",
+      "Icon": "assets/actionIcon",
       "UUID": "com.dariom.simple-weather.weather-action",
       "PropertyInspectorPath": "actions/weather/settings/settings.html",
       "States": [
         {
-          "Image": "actions/weather/assets/action"
+          "Image": "assets/stateIcon"
         }
       ]
     }

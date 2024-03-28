@@ -13,7 +13,7 @@ weatherAction.onKeyUp(async ({action, context, device, event, payload}) => {
 
     const loadWeatherFn = loadWeather(settings, context);
     await loadWeatherFn();
-    setupRefresh(settings.refresh, loadWeatherFn);
+    setupRefresh(parseInt(settings.refresh), loadWeatherFn);
 });
 
 function loadWeather(settings, context) {
@@ -24,7 +24,7 @@ function loadWeather(settings, context) {
         const weatherData = await getWeatherData(weatherUrl, context);
 
         const iconUrl = `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`;
-        let icon = await getWeatherIcon(iconUrl, context);
+        const icon = await getWeatherIcon(iconUrl, context);
 
         const temperature = weatherData.main.temp.toFixed(0) + (unit === "metric" ? "°C" : "°F");
 
@@ -33,8 +33,7 @@ function loadWeather(settings, context) {
     }
 }
 
-function setupRefresh(refresh, fn) {
-    const refreshInterval = parseInt(refresh);
+function setupRefresh(refreshInterval, fn) {
     if (refreshInterval) {
         clearInterval(intervalID);
         intervalID = setInterval(() => fn(), refreshInterval);
@@ -49,7 +48,12 @@ function trimSettings(settings) {
 }
 
 function validateSettings(settings, context) {
-    for (let key in settings) {
+    if (Object.keys(settings).length === 0) {
+        $SD.showAlert(context);
+        throw new Error("Settings are empty");
+    }
+
+    for (const key in settings) {
         if (!settings[key]) {
             $SD.showAlert(context);
             throw new Error(`Setting <${key}> has no value`);
