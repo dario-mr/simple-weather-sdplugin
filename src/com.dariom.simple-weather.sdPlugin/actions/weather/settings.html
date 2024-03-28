@@ -19,9 +19,6 @@
     <script src="../../lib/js/api.js"></script>
     <script src="../../lib/js/property-inspector.js"></script>
     <script src="../../lib/js/dynamic-styles.js"></script>
-
-    <!-- Property Inspector Source -->
-    <script src="settings.js"></script>
 </head>
 
 <body>
@@ -33,6 +30,10 @@
             <div class="sdpi-item-label">API key</div>
             <input class="sdpi-item-value" id="api-key" name="apiKey" type="text" required
                    placeholder="OpenWeather API key"/>
+        </div>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label empty"></div>
+            <button class="sdpi-item-value" id="getApiKey">Get API key</button>
         </div>
         <div class="sdpi-item">
             <div class="sdpi-item-label">Latitude</div>
@@ -67,6 +68,9 @@
         </div>
     </form>
 </div>
+
+<!-- Settings Source -->
+<script src="settings.js"></script>
 </body>
 
 </html>

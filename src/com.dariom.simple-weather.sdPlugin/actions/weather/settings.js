@@ -12,3 +12,7 @@ $PI.onConnected((json) => {
         })
     );
 });
+
+document.getElementById('getApiKey').addEventListener('click', () => {
+    $PI.openUrl("https://home.openweathermap.org/api_keys");
+});
