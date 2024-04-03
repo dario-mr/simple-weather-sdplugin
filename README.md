@@ -1,13 +1,13 @@
 # Simple Weather plugin for Stream Deck
 
-This plugins displays weather conditions as a button in your `Stream Deck`, using the `OpenWeather` API.
+This plugins displays weather conditions as a button in your Stream Deck, using the `OpenWeather` API.
 
 Compatible with `windows` and `macOS`.
 
 ## Installation
 
 - install the plugin file from the `relase` folder
-- in your `Stream Deck` app, drag the `Simple Weather` button into an available slot
+- in your Stream Deck app, drag the `Simple Weather` button into an available slot
 - fill in the button settings
 - click the button to activate it
 
@@ -21,6 +21,8 @@ Compatible with `windows` and `macOS`.
 
 ## Packaging
 
+### MacOS
+
 In order to package and distribute your own version of this plugin, run the following command from the project root:
 
 ```shell
@@ -28,3 +30,7 @@ In order to package and distribute your own version of this plugin, run the foll
 ```
 
 The generated plugin can be found in the `release` folder.
+
+### Windows
+
+Follow the instructions on Stream Deck SDK [page](https://docs.elgato.com/sdk/plugins/packaging)
