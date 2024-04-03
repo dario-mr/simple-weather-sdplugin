@@ -1,23 +1,25 @@
 const weatherAction = new Action('com.dariom.simple-weather.weather-action');
 let intervalID = null;
 
-/**
- * The first event fired when Stream Deck starts
- */
-$SD.onConnected(({actionInfo, appInfo, connection, messageType, port, uuid}) => {
+weatherAction.onKeyUp(async ({context, payload}) => {
+    await loadWeatherAndSetupRefresh(payload, context);
 });
 
-weatherAction.onKeyUp(async ({action, context, device, event, payload}) => {
-    const settings = trimSettings(payload.settings);
-    validateSettings(settings, context);
+weatherAction.onWillAppear(async ({context, payload}) => {
+    await loadWeatherAndSetupRefresh(payload, context);
+});
 
-    const loadWeatherFn = loadWeather(settings, context);
+async function loadWeatherAndSetupRefresh(payload, context) {
+    const loadWeatherFn = loadWeather(payload, context);
     await loadWeatherFn();
-    setupRefresh(parseInt(settings.refresh), loadWeatherFn);
-});
+    setupRefresh(parseInt(payload.settings.refresh), loadWeatherFn);
+}
 
-function loadWeather(settings, context) {
+function loadWeather(payload, context) {
     return async () => {
+        const settings = trimSettings(payload.settings);
+        validateSettings(settings, context);
+
         const {apiKey, latitude, longitude, unit} = settings;
 
         const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?appid=${apiKey}&lat=${latitude}&lon=${longitude}&units=${unit}`;
