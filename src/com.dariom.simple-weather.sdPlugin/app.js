@@ -51,14 +51,12 @@ function trimSettings(settings) {
 
 function validateSettings(settings, context) {
     if (Object.keys(settings).length === 0) {
-        $SD.showAlert(context);
-        throw new Error("Settings are empty");
+        logErrorAndThrow(context, "Settings are empty")
     }
 
     for (const key in settings) {
         if (!settings[key]) {
-            $SD.showAlert(context);
-            throw new Error(`Setting <${key}> has no value`);
+            logErrorAndThrow(context, `Setting <${key}> has no value`)
         }
     }
 }
@@ -69,8 +67,7 @@ async function getWeatherData(url, context) {
             if (response.ok) {
                 return response.json();
             }
-            $SD.showAlert(context);
-            throw new Error(`Error fetching weather data from <${url}>: <${response.status}, ${response.statusText}>`);
+            logErrorAndThrow(context, `Error fetching weather data from <${url}>: <${response.status}, ${response.statusText}>`)
         });
 }
 
@@ -81,17 +78,22 @@ async function getWeatherIcon(url, context) {
             if (response.ok) {
                 return response.blob();
             }
-            $SD.showAlert(context);
-            throw new Error(`Error fetching weather icon from <${url}>: <${response.status}, ${response.statusText}>`);
+            logErrorAndThrow(context, `Error fetching weather icon from <${url}>: <${response.status}, ${response.statusText}>`)
         })
         // convert blob to base64 image
         .then(blob => new Promise((resolve) => {
             const reader = new FileReader();
             reader.onloadend = () => resolve(reader.result);
             reader.onerror = () => {
-                $SD.showAlert(context);
-                throw new Error("Error loading weather icon");
+                logErrorAndThrow(context, "Error converting weather icon to base64 image")
             };
             reader.readAsDataURL(blob);
         }));
+}
+
+function logErrorAndThrow(context, message) {
+    $SD.showAlert(context);
+    $SD.logMessage(message);
+
+    throw new Error(message);
 }
