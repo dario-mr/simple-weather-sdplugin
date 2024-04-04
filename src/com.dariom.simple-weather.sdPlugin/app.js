@@ -20,15 +20,13 @@ function loadWeather(payload, context) {
         const settings = trimSettings(payload.settings);
         validateSettings(settings, context);
 
-        const {apiKey, latitude, longitude, unit} = settings;
-
-        const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?appid=${apiKey}&lat=${latitude}&lon=${longitude}&units=${unit}`;
-        const weatherData = await getWeatherData(weatherUrl, context);
+        const weatherUrl = await buildWeatherUrl(settings, context);
+        const weatherData = await fetchData(weatherUrl, context);
 
         const iconUrl = `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`;
         const icon = await getWeatherIcon(iconUrl, context);
 
-        const temperature = weatherData.main.temp.toFixed(0) + (unit === "metric" ? "°C" : "°F");
+        const temperature = weatherData.main.temp.toFixed(0) + (settings.unit === "metric" ? "°C" : "°F");
 
         $SD.setTitle(context, temperature);
         $SD.setImage(context, icon);
@@ -51,23 +49,46 @@ function trimSettings(settings) {
 
 function validateSettings(settings, context) {
     if (Object.keys(settings).length === 0) {
-        logErrorAndThrow(context, "Settings are empty")
+        logErrorAndThrow(context, "Settings are empty");
     }
 
-    for (const key in settings) {
-        if (!settings[key]) {
-            logErrorAndThrow(context, `Setting <${key}> has no value`)
+    const {apiKey, type, city, latitude, longitude} = settings;
+
+    if (!apiKey) {
+        logErrorAndThrow(context, "<API key> has no value");
+    }
+    if (type === "city") {
+        if (!city) {
+            logErrorAndThrow(context, "<City> has no value");
+        }
+    }
+    if (type === "coordinates") {
+        if (!latitude || !longitude) {
+            logErrorAndThrow(context, "<Latitude> or <Longitude> have no value");
         }
     }
 }
 
-async function getWeatherData(url, context) {
+async function buildWeatherUrl(settings, context) {
+    const {apiKey, type, city, latitude, longitude, unit} = settings;
+
+    if (type === "coordinates") {
+        return `https://api.openweathermap.org/data/2.5/weather?appid=${apiKey}&lat=${latitude}&lon=${longitude}&units=${unit}`;
+    }
+    if (type === "city") {
+        const geocodingUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`;
+        const geoData = await fetchData(geocodingUrl, context);
+        return `https://api.openweathermap.org/data/2.5/weather?appid=${apiKey}&lat=${geoData[0].lat}&lon=${geoData[0].lon}&units=${unit}`;
+    }
+}
+
+async function fetchData(url, context) {
     return fetch(url)
         .then(response => {
             if (response.ok) {
                 return response.json();
             }
-            logErrorAndThrow(context, `Error fetching weather data from <${url}>: <${response.status}, ${response.statusText}>`)
+            logErrorAndThrow(context, `Error fetching data from <${url}>: <${response.status}, ${response.statusText}>`);
         });
 }
 
@@ -78,14 +99,14 @@ async function getWeatherIcon(url, context) {
             if (response.ok) {
                 return response.blob();
             }
-            logErrorAndThrow(context, `Error fetching weather icon from <${url}>: <${response.status}, ${response.statusText}>`)
+            logErrorAndThrow(context, `Error fetching weather icon from <${url}>: <${response.status}, ${response.statusText}>`);
         })
         // convert blob to base64 image
         .then(blob => new Promise((resolve) => {
             const reader = new FileReader();
             reader.onloadend = () => resolve(reader.result);
             reader.onerror = () => {
-                logErrorAndThrow(context, "Error converting weather icon to base64 image")
+                logErrorAndThrow(context, "Error converting weather icon to base64 image");
             };
             reader.readAsDataURL(blob);
         }));
