@@ -8,8 +8,7 @@ $PI.onConnected((json) => {
     form.addEventListener(
         'input',
         Utils.debounce(500, () => {
-            const value = Utils.getFormValue(form);
-            const settings = trimSettings(value);
+            const settings = trimSettings(Utils.getFormValue(form));
             $PI.setSettings(settings);
         })
     );
