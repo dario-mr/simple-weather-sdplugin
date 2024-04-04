@@ -9,7 +9,8 @@ $PI.onConnected((json) => {
         'input',
         Utils.debounce(500, () => {
             const value = Utils.getFormValue(form);
-            $PI.setSettings(value);
+            const settings = trimSettings(value);
+            $PI.setSettings(settings);
         })
     );
 });
@@ -36,4 +37,11 @@ function showElementsBasedOnType(type) {
             coordinatesContainer.classList.remove("hidden");
             break;
     }
+}
+
+function trimSettings(settings) {
+    return Object.fromEntries(
+        Object.keys(settings)
+            .map(key => [key, settings[key].trim()])
+    );
 }

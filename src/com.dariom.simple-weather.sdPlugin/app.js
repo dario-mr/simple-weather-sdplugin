@@ -10,14 +10,13 @@ weatherAction.onWillAppear(async ({context, payload}) => {
 });
 
 async function loadWeatherAndSetupRefresh(payload, context) {
-    const loadWeatherFn = loadWeather(payload, context);
+    const loadWeatherFn = loadWeather(payload.settings, context);
     await loadWeatherFn();
     setupRefresh(parseInt(payload.settings.refresh), loadWeatherFn);
 }
 
-function loadWeather(payload, context) {
+function loadWeather(settings, context) {
     return async () => {
-        const settings = trimSettings(payload.settings);
         validateSettings(settings, context);
 
         const weatherUrl = await buildWeatherUrl(settings, context);
@@ -38,13 +37,6 @@ function setupRefresh(refreshInterval, fn) {
         clearInterval(intervalID);
         intervalID = setInterval(() => fn(), refreshInterval);
     }
-}
-
-function trimSettings(settings) {
-    return Object.fromEntries(
-        Object.keys(settings)
-            .map(key => [key, settings[key].trim()])
-    );
 }
 
 function validateSettings(settings, context) {
