@@ -1,5 +1,6 @@
 $PI.onConnected((json) => {
     const form = document.getElementById('settings');
+    /** @type {Settings} */
     const settings = json.actionInfo.payload.settings;
 
     Utils.setFormValue(settings, form);
@@ -14,7 +15,7 @@ $PI.onConnected((json) => {
     );
 });
 
-document.getElementById('getApiKey').addEventListener('click', () => {
+document.getElementById('get-api-key-button').addEventListener('click', () => {
     $PI.openUrl("https://home.openweathermap.org/api_keys");
 });
 
@@ -22,6 +23,9 @@ document.getElementById('type').addEventListener('change', (event) => {
     showElementsBasedOnType(event.target.value);
 });
 
+/**
+ * @param {string} type
+ */
 function showElementsBasedOnType(type) {
     const cityContainer = document.getElementById('city-container');
     const coordinatesContainer = document.getElementById('coordinates-container');
@@ -38,6 +42,10 @@ function showElementsBasedOnType(type) {
     }
 }
 
+/**
+ * @param {Settings} settings
+ * @returns {Settings} trimmed settings
+ */
 function trimSettings(settings) {
     return Object.fromEntries(
         Object.keys(settings)

@@ -1,5 +1,8 @@
+/** @type {ELGSDAction} */
 const weatherAction = new Action('com.dariom.simple-weather.weather-action');
-let intervalID = null;
+
+/** @type {number} */
+let intervalID;
 
 weatherAction.onKeyUp(async ({context, payload}) => {
     await loadWeatherAndSetupRefresh(payload, context);
@@ -9,17 +12,27 @@ weatherAction.onWillAppear(async ({context, payload}) => {
     await loadWeatherAndSetupRefresh(payload, context);
 });
 
+/**
+ * @param payload {Payload} payload
+ * @param context {string} A value to identify the instance of the action
+ */
 async function loadWeatherAndSetupRefresh(payload, context) {
     const loadWeatherFn = loadWeather(payload.settings, context);
     await loadWeatherFn();
     setupRefresh(parseInt(payload.settings.refresh), loadWeatherFn);
 }
 
+/**
+ * @param settings {Settings} Plugin settings
+ * @param context {string} A value to identify the instance of the action
+ * @returns {(function(): Promise<void>)|*} function to load the weather and display it in the button
+ */
 function loadWeather(settings, context) {
     return async () => {
         validateSettings(settings, context);
 
         const weatherUrl = await buildWeatherUrl(settings, context);
+        /** @type {WeatherData} */
         const weatherData = await fetchData(weatherUrl, context);
 
         const iconUrl = `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`;
@@ -32,6 +45,10 @@ function loadWeather(settings, context) {
     }
 }
 
+/**
+ * @param refreshInterval {number} Refresh interval in milliseconds
+ * @param fn {function} Function to run on the given interval
+ */
 function setupRefresh(refreshInterval, fn) {
     if (refreshInterval) {
         clearInterval(intervalID);
@@ -39,6 +56,10 @@ function setupRefresh(refreshInterval, fn) {
     }
 }
 
+/**
+ * @param settings {Settings} Plugin settings
+ * @param context {string} A value to identify the instance of the action
+ */
 function validateSettings(settings, context) {
     if (Object.keys(settings).length === 0) {
         logErrorAndThrow(context, "Settings are empty");
@@ -61,6 +82,11 @@ function validateSettings(settings, context) {
     }
 }
 
+/**
+ * @param settings {Settings} Plugin settings
+ * @param context {string} A value to identify the instance of the action
+ * @returns {Promise<string>} weather url
+ */
 async function buildWeatherUrl(settings, context) {
     const {apiKey, type, city, latitude, longitude, unit} = settings;
 
@@ -69,11 +95,17 @@ async function buildWeatherUrl(settings, context) {
     }
     if (type === "city") {
         const geocodingUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`;
+        /** @type {GeoData} */
         const geoData = await fetchData(geocodingUrl, context);
         return `https://api.openweathermap.org/data/2.5/weather?appid=${apiKey}&lat=${geoData[0].lat}&lon=${geoData[0].lon}&units=${unit}`;
     }
 }
 
+/**
+ * @param url {string} url to fetch
+ * @param context {string} A value to identify the instance of the action
+ * @returns {Promise<Object>} fetched data
+ */
 async function fetchData(url, context) {
     return fetch(url)
         .then(response => {
@@ -84,6 +116,11 @@ async function fetchData(url, context) {
         });
 }
 
+/**
+ * @param url {string} url of the weather icon to fetch
+ * @param context {string} A value to identify the instance of the action
+ * @returns {Promise<string>} base64 representation of the weather icon
+ */
 async function getWeatherIcon(url, context) {
     return fetch(url)
         // download image as blob
@@ -104,6 +141,11 @@ async function getWeatherIcon(url, context) {
         }));
 }
 
+/**
+ * @param context {string} A value to identify the instance of the action
+ * @param message {string} Message to log
+ * @throws {Error} Throws error in order to stop execution
+ */
 function logErrorAndThrow(context, message) {
     $SD.showAlert(context);
     $SD.logMessage(message);
