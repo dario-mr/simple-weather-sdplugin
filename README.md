@@ -14,8 +14,10 @@ Compatible with `windows` and `macOS`.
 ## Button Settings
 
 - `API key`: your `OpenWeather` API key (get it [here](https://home.openweathermap.org/api_keys))
-- `Latitude`: latitude for which the weather conditions will be displayed (range: -90, 90)
-- `Longitude`: longitude for which the weather conditions will be displayed (range: -180, 180)
+- `Type`: how you will configure the plugin, either by City or Coordinates
+- `City`: city for which to display weather conditions
+- `Latitude`: latitude for which to display weather conditions (range: -90, 90)
+- `Longitude`: longitude for which to display weather conditions (range: -180, 180)
 - `Unit`: temperature unit (Celsius, Fahrenheit)
 - `Refresh`: how often the data is refreshed
 
@@ -33,4 +35,4 @@ The generated plugin can be found in the `release` folder.
 
 ### Windows
 
-Follow the instructions on Stream Deck SDK [page](https://docs.elgato.com/sdk/plugins/packaging)
+Follow the instructions on the Stream Deck SDK [page](https://docs.elgato.com/sdk/plugins/packaging).
