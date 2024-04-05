@@ -6,7 +6,7 @@
  * @property {string} city City
  * @property {string} latitude Latitude
  * @property {string} longitude Longitude
- * @property {string} refresh Refresh time in milliseconds
+ * @property {string} refresh Refresh interval in milliseconds
  * @property {string} unit temperature unit (Celsius, Fahrenheit)
  */
 
