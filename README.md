@@ -14,12 +14,12 @@ Compatible with `windows` and `macOS`.
 ## Button Settings
 
 - `API key`: your `OpenWeather` API key (get it [here](https://home.openweathermap.org/api_keys))
-- `Type`: how you will configure the plugin, either by City or Coordinates
-- `City`: city for which to display weather conditions
-- `Latitude`: latitude for which to display weather conditions (range: -90, 90)
-- `Longitude`: longitude for which to display weather conditions (range: -180, 180)
+- `Location by`: how to configure the location, either by City or by Coordinates
+- `City`: city for which to display the weather
+- `Latitude`: latitude for which to display the weather (range: -90, 90)
+- `Longitude`: longitude for which to display the weather (range: -180, 180)
 - `Unit`: temperature unit (Celsius, Fahrenheit)
-- `Refresh`: how often the data is refreshed
+- `Refresh`: how often to refresh the data
 
 ## Packaging
 
