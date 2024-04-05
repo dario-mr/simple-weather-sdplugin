@@ -23,7 +23,7 @@ async function loadWeatherAndSetupRefresh(payload, context) {
 }
 
 /**
- * @param settings {Settings} Plugin settings
+ * @param settings {Settings} Action settings
  * @param context {string} A value to identify the instance of the action
  * @returns {(function(): Promise<void>)|*} function to load the weather and display it in the button
  */
@@ -57,7 +57,7 @@ function setupRefresh(refreshInterval, fn) {
 }
 
 /**
- * @param settings {Settings} Plugin settings
+ * @param settings {Settings} Action settings
  * @param context {string} A value to identify the instance of the action
  */
 function validateSettings(settings, context) {
@@ -83,7 +83,7 @@ function validateSettings(settings, context) {
 }
 
 /**
- * @param settings {Settings} Plugin settings
+ * @param settings {Settings} Action settings
  * @param context {string} A value to identify the instance of the action
  * @returns {Promise<string>} weather url
  */
