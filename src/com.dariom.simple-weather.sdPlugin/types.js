@@ -2,7 +2,7 @@
  * @typedef {Object} Settings Action settings
  *
  * @property {string} apiKey OpenWeather API key
- * @property {string} type Type of configuration, either City or Coordinates
+ * @property {string} type Location type, either City or Coordinates
  * @property {string} city City
  * @property {string} latitude Latitude
  * @property {string} longitude Longitude

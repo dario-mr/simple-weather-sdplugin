@@ -24,9 +24,9 @@ document.getElementById('type').addEventListener('change', (event) => {
 });
 
 /**
- * @param {string} type
+ * @param {string} type Location type (city or coordinates)
  */
-function showElementsBasedOnType(type) {
+function showElementsBasedOnType(type = 'city') {
     const cityContainer = document.getElementById('city-container');
     const coordinatesContainer = document.getElementById('coordinates-container');
 
