@@ -2,6 +2,7 @@ $PI.onConnected((json) => {
     const form = document.getElementById('settings');
     /** @type {Settings} */
     const settings = json.actionInfo.payload.settings;
+    setDefaultValues(settings);
 
     Utils.setFormValue(settings, form);
     showElementsBasedOnType(settings.type);
@@ -24,9 +25,20 @@ document.getElementById('type').addEventListener('change', (event) => {
 });
 
 /**
+ * @param {Settings} settings
+ */
+function setDefaultValues(settings) {
+    if (Object.keys(settings).length === 0) {
+        settings.type = 'city';
+        settings.unit = 'metric';
+        settings.refresh = '0';
+    }
+}
+
+/**
  * @param {string} type Location type (city or coordinates)
  */
-function showElementsBasedOnType(type = 'city') {
+function showElementsBasedOnType(type) {
     const cityContainer = document.getElementById('city-container');
     const coordinatesContainer = document.getElementById('coordinates-container');
 
