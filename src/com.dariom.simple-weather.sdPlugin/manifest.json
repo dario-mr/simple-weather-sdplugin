@@ -1,8 +1,8 @@
 {
   "Name": "Simple Weather",
-  "Description": "Simple button to display weather information",
-  "Version": "1.0.0",
+  "Description": "Plugin to display weather conditions",
   "Author": "dario-mr",
+  "Version": "1.0.0",
   "URL": "https://github.com/dario-mr/simple-weather-sdplugin",
   "Icon": "assets/icon",
   "Category": "Simple Weather",
@@ -24,7 +24,7 @@
   ],
   "Actions": [
     {
-      "Name": "Weather",
+      "Name": "Display weather",
       "Icon": "assets/actionIcon",
       "UUID": "com.dariom.simple-weather.weather-action",
       "PropertyInspectorPath": "actions/weather/settings.html",

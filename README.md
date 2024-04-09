@@ -25,8 +25,6 @@ Compatible with `windows` and `macOS`.
 
 ### MacOS
 
-In order to package and distribute your own version of this plugin, run the following command from the project root:
-
 ```shell
 ./DistributionTool -b -i src/com.dariom.simple-weather.sdPlugin -o release
 ```
@@ -36,3 +34,7 @@ The generated plugin can be found in the `release` folder.
 ### Windows
 
 Follow the instructions on the Stream Deck SDK [page](https://docs.elgato.com/sdk/plugins/packaging).
+
+## Preview
+
+![](previews/screenshot.png)
