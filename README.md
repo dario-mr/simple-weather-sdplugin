@@ -1,6 +1,6 @@
 # Simple Weather plugin for Stream Deck
 
-This plugins displays weather conditions as a button in your Stream Deck, using the `OpenWeather` API.
+Stream Deck plugin to display weather conditions as a button in your Stream Deck, using the `OpenWeather` API.
 
 Compatible with `windows` and `macOS`.
 

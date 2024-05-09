@@ -39,8 +39,9 @@ function loadWeather(settings, context) {
         const icon = await getWeatherIcon(iconUrl, context);
 
         const temperature = weatherData.main.temp.toFixed(0) + (settings.unit === "metric" ? "°C" : "°F");
+        const title = buildTitle(settings, temperature);
 
-        $SD.setTitle(context, temperature);
+        $SD.setTitle(context, title);
         $SD.setImage(context, icon);
     }
 }
@@ -139,6 +140,23 @@ async function getWeatherIcon(url, context) {
             };
             reader.readAsDataURL(blob);
         }));
+}
+
+/**
+ * @param settings {Settings} Action settings
+ * @param temperature {string} Formatted temperature
+ * @return {string} The button title, comprised of City (if setting applied) and Temperature
+ */
+function buildTitle(settings, temperature) {
+    let title = "";
+
+    if (settings.type === "city") {
+        title += `${settings.city}\n\n\n\n`;
+
+    }
+    title += temperature;
+
+    return title;
 }
 
 /**
